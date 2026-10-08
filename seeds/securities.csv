@@ -1,0 +1,16 @@
+ticker,company_name,sector
+AAPL,Apple Inc.,Technology
+MSFT,Microsoft Corporation,Technology
+NVDA,NVIDIA Corporation,Technology
+GOOGL,Alphabet Inc.,Technology
+JPM,JPMorgan Chase & Co.,Financials
+GS,Goldman Sachs Group Inc.,Financials
+BAC,Bank of America Corporation,Financials
+XOM,Exxon Mobil Corporation,Energy
+CVX,Chevron Corporation,Energy
+JNJ,Johnson & Johnson,Healthcare
+UNH,UnitedHealth Group Inc.,Healthcare
+PFE,Pfizer Inc.,Healthcare
+AMZN,Amazon.com Inc.,Consumer
+WMT,Walmart Inc.,Consumer
+SPY,SPDR S&P 500 ETF Trust,Benchmark

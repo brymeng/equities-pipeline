@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: dim_securities
+    columns:
+      - name: ticker
+        data_tests:
+          - unique
+          - not_null
+      - name: sector
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Technology', 'Financials', 'Energy', 'Healthcare', 'Consumer', 'Benchmark']
+
+  - name: fct_daily_prices
+    columns:
+      - name: price_key
+        data_tests:
+          - unique
+          - not_null
+      - name: ticker
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_securities')
+                field: ticker
+      - name: price_date
+        data_tests:
+          - not_null
+      - name: adj_close_price
+        data_tests:
+          - not_null
