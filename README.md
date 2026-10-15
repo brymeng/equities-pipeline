@@ -116,7 +116,7 @@ The original 5,670 rows kept their first load timestamp; only the 1,890 new rows
 
 - Lookback window and periodic full refresh, to capture late corrections and dividend restatements
 - Scheduled dbt job with a production environment and a least-privilege Snowflake role
-- Model and column descriptions for richer dbt docs; dbt snapshots for slowly changing dimensions
+- dbt snapshots for slowly changing dimensions; `persist_docs` to write model descriptions into Snowflake comments
 - Market-cap weighting and official GICS sectors
 - A live or scheduled data feed in place of batch replay
 - Power BI report saved as a `.pbip` project for version control, with takeaways driven by DAX measures
