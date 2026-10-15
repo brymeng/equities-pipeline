@@ -2,7 +2,9 @@ version: 2
 
 sources:
   - name: raw
+    description: Raw daily equity prices from yfinance, loaded in CSV batches via a Snowflake internal stage and COPY INTO.
     database: EQUITIES
     schema: RAW
     tables:
       - name: raw_daily_prices
+        description: One row per ticker per trading day, as delivered. No cleaning is applied at this layer.

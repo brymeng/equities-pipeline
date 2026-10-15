@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: stg_prices
+    description: >
+      Cleaned daily prices. Tickers are standardized, columns renamed, and prices
+      rounded to 4 decimals. One row per ticker per trading day; no rows are filtered.
+    columns:
+      - name: ticker
+        description: Ticker symbol, upper-cased and trimmed.
+      - name: price_date
+        description: Trading date.
+      - name: adj_close_price
+        description: Close price adjusted for splits and dividends. The basis for every return calculation.

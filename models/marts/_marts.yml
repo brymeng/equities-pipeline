@@ -2,25 +2,38 @@ version: 2
 
 models:
   - name: dim_securities
+    description: One row per security. Maps each ticker to its company name, sector, and benchmark flag. Built from the securities seed.
     columns:
       - name: ticker
+        description: Primary key.
         data_tests:
           - unique
           - not_null
+      - name: company_name
+        description: Company or fund name.
       - name: sector
+        description: Simplified sector grouping (see README for how it differs from GICS).
         data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: ['Technology', 'Financials', 'Energy', 'Healthcare', 'Consumer', 'Benchmark']
+      - name: is_benchmark
+        description: True for SPY, the market benchmark.
 
   - name: fct_daily_prices
+    description: >
+      Daily price fact table. Grain: one row per ticker per trading day.
+      Incremental: each run adds only dates newer than those already loaded,
+      merging on price_key so re-runs never create duplicates.
     columns:
       - name: price_key
+        description: Surrogate key (ticker + date). Unique per row.
         data_tests:
           - unique
           - not_null
       - name: ticker
+        description: Foreign key to dim_securities.
         data_tests:
           - not_null
           - relationships:
@@ -28,8 +41,36 @@ models:
                 to: ref('dim_securities')
                 field: ticker
       - name: price_date
+        description: Trading date.
         data_tests:
           - not_null
       - name: adj_close_price
+        description: Close adjusted for splits and dividends.
         data_tests:
           - not_null
+      - name: dbt_loaded_at
+        description: Timestamp of the dbt run that loaded the row. Used to verify incremental loads.
+
+  - name: mart_daily_returns
+    description: Daily total return per ticker, calculated from adjusted close. Rebuilt in full each run, because each return needs the prior day's price.
+    columns:
+      - name: daily_return
+        description: Adjusted close divided by the prior trading day's adjusted close, minus 1. Null on each ticker's first day.
+
+  - name: mart_moving_averages
+    description: 50- and 200-trading-day moving averages of adjusted close, per ticker.
+    columns:
+      - name: ma_50
+        description: 50-day average. Null until 50 trading days of history exist.
+      - name: ma_200
+        description: 200-day average. Null until 200 trading days of history exist.
+
+  - name: mart_sector_performance
+    description: Equal-weighted sector returns. Grain - one row per sector per trading day. SPY appears as the Benchmark sector.
+    columns:
+      - name: sector_daily_return
+        description: Simple average of the daily returns of the sector's securities.
+      - name: cumulative_return
+        description: Daily sector returns compounded from the first date in the data.
+      - name: num_securities
+        description: Number of securities contributing that day. Constant per sector when no prices are missing.
